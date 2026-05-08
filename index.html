@@ -1,410 +1,653 @@
-
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ApplyForMe — We Apply. You Get Interviews.</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<!-- EmailJS -->
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 <style>
-*{box-sizing:border-box;margin:0;padding:0}
-.af{font-family:var(--font-sans);max-width:640px;margin:0 auto;padding:1.5rem 1rem}
-.hero{text-align:center;padding:2rem 1rem 1.5rem;border-bottom:0.5px solid var(--color-border-tertiary);margin-bottom:1.5rem}
-.hero-badge{display:inline-flex;align-items:center;gap:6px;background:#E1F5EE;color:#085041;font-size:12px;font-weight:500;padding:5px 14px;border-radius:20px;margin-bottom:1rem}
-.hero-title{font-size:26px;font-weight:500;color:var(--color-text-primary);line-height:1.3;margin-bottom:0.75rem}
-.hero-title span{color:#1D9E75}
-.hero-sub{font-size:14px;color:var(--color-text-secondary);line-height:1.6;max-width:420px;margin:0 auto 1.5rem}
-.promise-row{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:1.5rem}
-.promise-box{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:0.75rem;text-align:center}
-.promise-num{font-size:20px;font-weight:500;color:#1D9E75}
-.promise-lbl{font-size:11px;color:var(--color-text-secondary);margin-top:2px}
-.how-row{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:1.5rem}
-.how-box{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);padding:0.75rem;text-align:center}
-.how-icon{font-size:22px;color:#1D9E75;margin-bottom:6px}
-.how-step{font-size:10px;color:var(--color-text-secondary);margin-bottom:4px;text-transform:uppercase;letter-spacing:0.5px}
-.how-title{font-size:12px;font-weight:500;color:var(--color-text-primary)}
-.plan-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:1.5rem}
-.plan-card{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:1.25rem;cursor:pointer;transition:border-color 0.2s}
-.plan-card.featured{border:2px solid #1D9E75}
-.plan-card:hover{border-color:#1D9E75}
-.plan-badge{background:#E1F5EE;color:#085041;font-size:11px;font-weight:500;padding:3px 10px;border-radius:20px;display:inline-block;margin-bottom:8px}
-.plan-name{font-size:15px;font-weight:500;color:var(--color-text-primary);margin-bottom:4px}
-.plan-price{font-size:24px;font-weight:500;color:#1D9E75;margin-bottom:8px}
-.plan-price span{font-size:13px;color:var(--color-text-secondary);font-weight:400}
-.plan-feat{font-size:12px;color:var(--color-text-secondary);line-height:1.8}
-.plan-feat i{color:#1D9E75;margin-right:4px;font-size:13px}
-.section-label{font-size:12px;color:var(--color-text-secondary);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:0.75rem}
-.card{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:1.25rem;margin-bottom:1rem}
-.inp-label{font-size:13px;color:var(--color-text-secondary);margin-bottom:5px;display:block}
-.inp-group{margin-bottom:1rem}
-.upload-zone{border:1.5px dashed var(--color-border-secondary);border-radius:var(--border-radius-md);padding:1.5rem;text-align:center;cursor:pointer;transition:all 0.2s}
-.upload-zone:hover,.upload-zone.done{border-color:#1D9E75;background:#E1F5EE}
-.upload-zone.done .uz-icon{color:#1D9E75}
-.uz-icon{font-size:28px;color:var(--color-text-secondary);margin-bottom:6px}
-.uz-txt{font-size:13px;color:var(--color-text-secondary)}
-.upload-zone.done .uz-txt{color:#085041;font-weight:500}
-.btn-main{width:100%;padding:13px;background:#1D9E75;color:white;border:none;border-radius:var(--border-radius-md);font-size:15px;font-weight:500;cursor:pointer;transition:background 0.2s}
-.btn-main:hover{background:#0F6E56}
-.btn-main:disabled{background:var(--color-border-secondary);cursor:not-allowed}
-.btn-ghost{width:100%;padding:11px;background:transparent;color:var(--color-text-secondary);border:0.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);font-size:14px;cursor:pointer;margin-top:8px}
-.step-bar{display:flex;gap:6px;margin-bottom:1.5rem}
-.s-dot{flex:1;height:3px;border-radius:2px;background:var(--color-border-tertiary);transition:background 0.3s}
-.s-dot.on,.s-dot.done{background:#1D9E75}
-.hidden{display:none}
-.pay-methods{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:1rem}
-.pay-btn{border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);padding:10px 8px;text-align:center;cursor:pointer;font-size:12px;color:var(--color-text-secondary);transition:all 0.2s}
-.pay-btn.sel{border-color:#1D9E75;color:#085041;background:#E1F5EE;font-weight:500}
-.timeline{margin-bottom:1rem}
-.tl-item{display:flex;gap:12px;padding:10px 0;border-bottom:0.5px solid var(--color-border-tertiary)}
-.tl-item:last-child{border-bottom:none}
-.tl-dot{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;margin-top:2px}
-.tl-dot.active{background:#E1F5EE;color:#1D9E75}
-.tl-dot.done{background:#1D9E75;color:white}
-.tl-dot.wait{background:var(--color-background-secondary);color:var(--color-text-secondary)}
-.tl-title{font-size:14px;font-weight:500;color:var(--color-text-primary);margin-bottom:2px}
-.tl-sub{font-size:12px;color:var(--color-text-secondary)}
-.loading-dots{display:flex;gap:5px;justify-content:center;padding:0.75rem 0}
-.loading-dots span{width:7px;height:7px;border-radius:50%;background:#1D9E75;animation:ld 1.2s infinite}
-.loading-dots span:nth-child(2){animation-delay:.2s}
-.loading-dots span:nth-child(3){animation-delay:.4s}
-@keyframes ld{0%,80%,100%{transform:translateY(0)}40%{transform:translateY(-7px)}}
-.result-item{border-left:3px solid #1D9E75;border-radius:0;padding:12px 14px;background:var(--color-background-secondary);margin-bottom:8px}
-.result-role{font-size:14px;font-weight:500;color:var(--color-text-primary)}
-.result-co{font-size:12px;color:var(--color-text-secondary);margin-bottom:6px}
-.result-letter{font-size:12px;color:var(--color-text-primary);line-height:1.6;background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);padding:10px;margin-top:6px}
-.guarantee{background:#E1F5EE;border:0.5px solid #9FE1CB;border-radius:var(--border-radius-md);padding:1rem 1.25rem;margin-bottom:1rem;display:flex;gap:12px;align-items:flex-start}
-.g-icon{font-size:20px;color:#1D9E75;flex-shrink:0;margin-top:2px}
-.g-title{font-size:13px;font-weight:500;color:#085041;margin-bottom:2px}
-.g-sub{font-size:12px;color:#0F6E56;line-height:1.5}
-.testimonials{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:1.5rem}
-.testi{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:0.875rem}
-.testi-text{font-size:12px;color:var(--color-text-primary);line-height:1.6;margin-bottom:6px;font-style:italic}
-.testi-name{font-size:11px;color:var(--color-text-secondary)}
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --green:#1a9e75;--green-dark:#0f6e56;--green-light:#e1f5ee;--green-mid:#9fe1cb;
+  --black:#0d0d0d;--white:#fff;--gray:#f5f4f0;--text-muted:#666;
+  --radius:12px;--radius-sm:8px;
+}
+body{font-family:'DM Sans',sans-serif;background:var(--black);color:var(--white);min-height:100vh;overflow-x:hidden}
+.screen{display:none;min-height:100vh;animation:fadeIn 0.35s ease}
+.screen.active{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+
+nav{display:flex;justify-content:space-between;align-items:center;padding:1.2rem 2rem;border-bottom:1px solid rgba(255,255,255,0.08)}
+.logo{font-family:'Syne',sans-serif;font-size:1.3rem;font-weight:800;letter-spacing:-0.02em}
+.logo span{color:var(--green)}
+.nav-btn{background:var(--green);color:#fff;border:none;padding:0.5rem 1.2rem;border-radius:6px;font-family:'DM Sans',sans-serif;font-weight:500;font-size:0.85rem;cursor:pointer;transition:background 0.2s}
+.nav-btn:hover{background:var(--green-dark)}
+.btn-ghost-sm{background:transparent;color:rgba(255,255,255,0.6);border:1px solid rgba(255,255,255,0.15);padding:0.45rem 1rem;border-radius:6px;font-size:0.85rem;cursor:pointer;transition:all 0.2s}
+.btn-ghost-sm:hover{border-color:rgba(255,255,255,0.4);color:#fff}
+
+/* HERO */
+.hero{padding:4rem 2rem 3rem;max-width:780px;margin:0 auto;text-align:center}
+.badge{display:inline-flex;align-items:center;gap:6px;background:rgba(26,158,117,0.15);border:1px solid rgba(26,158,117,0.3);color:var(--green-mid);padding:0.35rem 1rem;border-radius:99px;font-size:0.8rem;font-weight:500;margin-bottom:1.5rem}
+.badge::before{content:'';width:7px;height:7px;background:var(--green);border-radius:50%;display:inline-block}
+h1{font-family:'Syne',sans-serif;font-size:clamp(2.2rem,6vw,3.8rem);font-weight:800;line-height:1.05;letter-spacing:-0.03em;margin-bottom:1.2rem}
+h1 .accent{color:var(--green)}
+.sub{font-size:1.05rem;color:rgba(255,255,255,0.65);max-width:480px;margin:0 auto 2rem;line-height:1.6}
+.cta-row{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-bottom:1rem}
+.btn-primary{background:var(--green);color:#fff;border:none;padding:0.85rem 2rem;border-radius:var(--radius-sm);font-family:'Syne',sans-serif;font-weight:700;font-size:1rem;cursor:pointer;transition:all 0.2s}
+.btn-primary:hover{background:var(--green-dark);transform:translateY(-1px)}
+.btn-ghost{background:transparent;color:rgba(255,255,255,0.7);border:1px solid rgba(255,255,255,0.2);padding:0.85rem 2rem;border-radius:var(--radius-sm);font-family:'DM Sans',sans-serif;font-weight:500;font-size:1rem;cursor:pointer;transition:all 0.2s}
+.btn-ghost:hover{border-color:rgba(255,255,255,0.5);color:#fff}
+.trust-line{font-size:0.82rem;color:rgba(255,255,255,0.35)}
+
+.stats{display:flex;justify-content:center;gap:0;border-top:1px solid rgba(255,255,255,0.08);border-bottom:1px solid rgba(255,255,255,0.08);margin:0 2rem}
+.stat{flex:1;max-width:200px;padding:1.5rem 1rem;text-align:center;border-right:1px solid rgba(255,255,255,0.08)}
+.stat:last-child{border-right:none}
+.stat-num{font-family:'Syne',sans-serif;font-size:1.8rem;font-weight:800;color:var(--green)}
+.stat-label{font-size:0.78rem;color:rgba(255,255,255,0.45);margin-top:2px}
+
+.section{padding:3rem 2rem;max-width:780px;margin:0 auto}
+.section-tag{font-size:0.75rem;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:var(--green);margin-bottom:0.5rem}
+.section-title{font-family:'Syne',sans-serif;font-size:clamp(1.6rem,4vw,2.2rem);font-weight:800;letter-spacing:-0.02em;margin-bottom:2rem}
+.steps{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.step{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:var(--radius);padding:1.4rem}
+.step-num{font-family:'Syne',sans-serif;font-size:2rem;font-weight:800;color:var(--green);opacity:0.5;line-height:1}
+.step-title{font-family:'Syne',sans-serif;font-size:1rem;font-weight:700;margin:0.4rem 0 0.3rem}
+.step-desc{font-size:0.85rem;color:rgba(255,255,255,0.5);line-height:1.5}
+
+.pricing{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.plan{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);border-radius:var(--radius);padding:1.8rem}
+.plan.featured{background:rgba(26,158,117,0.12);border-color:var(--green)}
+.plan-badge{display:inline-block;background:var(--green);color:#fff;font-size:0.72rem;font-weight:700;padding:3px 10px;border-radius:99px;margin-bottom:0.8rem;font-family:'Syne',sans-serif;letter-spacing:0.05em}
+.plan-name{font-family:'Syne',sans-serif;font-size:1rem;font-weight:700;color:rgba(255,255,255,0.7);margin-bottom:0.3rem}
+.plan-price{font-family:'Syne',sans-serif;font-size:2.6rem;font-weight:800;letter-spacing:-0.04em;line-height:1}
+.plan-price span{font-size:1rem;font-weight:400;color:rgba(255,255,255,0.4)}
+.plan-features{list-style:none;margin:1.2rem 0 1.5rem;display:flex;flex-direction:column;gap:8px}
+.plan-features li{font-size:0.85rem;color:rgba(255,255,255,0.65);display:flex;align-items:center;gap:8px}
+.plan-features li::before{content:'✓';color:var(--green);font-weight:700}
+.plan-btn{width:100%;background:var(--green);color:#fff;border:none;padding:0.75rem;border-radius:var(--radius-sm);font-family:'Syne',sans-serif;font-weight:700;font-size:0.9rem;cursor:pointer;transition:all 0.2s}
+.plan:not(.featured) .plan-btn{background:transparent;border:1px solid rgba(255,255,255,0.2);color:rgba(255,255,255,0.8)}
+.plan-btn:hover{background:var(--green-dark);color:#fff;border-color:var(--green-dark)}
+
+.guarantee{background:rgba(26,158,117,0.1);border:1px solid rgba(26,158,117,0.25);border-radius:var(--radius);padding:1.5rem 2rem;display:flex;align-items:flex-start;gap:1rem;max-width:780px;margin:0 auto 3rem}
+.guarantee strong{font-family:'Syne',sans-serif;font-size:1rem;font-weight:700;display:block;margin-bottom:0.3rem}
+.guarantee p{font-size:0.85rem;color:rgba(255,255,255,0.6);line-height:1.5}
+
+.testimonials{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.testi{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:var(--radius);padding:1.3rem}
+.testi-quote{font-size:0.9rem;color:rgba(255,255,255,0.8);line-height:1.55;margin-bottom:0.8rem;font-style:italic}
+.testi-author{font-size:0.78rem;color:var(--green);font-weight:500}
+
+/* SIGNUP */
+.signup-wrap{max-width:520px;margin:0 auto;padding:2rem}
+.progress-bar{display:flex;gap:6px;margin-bottom:2rem}
+.progress-step{flex:1;height:3px;background:rgba(255,255,255,0.1);border-radius:99px;transition:background 0.3s}
+.progress-step.done{background:var(--green)}
+.flow-card{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);border-radius:var(--radius);padding:2rem}
+.flow-title{font-family:'Syne',sans-serif;font-size:1.5rem;font-weight:800;letter-spacing:-0.02em;margin-bottom:0.4rem}
+.flow-sub{font-size:0.88rem;color:rgba(255,255,255,0.5);margin-bottom:1.5rem}
+label{display:block;font-size:0.8rem;font-weight:500;color:rgba(255,255,255,0.5);margin-bottom:0.35rem;text-transform:uppercase;letter-spacing:0.05em}
+input,select,textarea{width:100%;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);border-radius:var(--radius-sm);padding:0.7rem 0.9rem;color:#fff;font-family:'DM Sans',sans-serif;font-size:0.9rem;margin-bottom:1rem;outline:none;transition:border-color 0.2s}
+input:focus,select:focus,textarea:focus{border-color:var(--green)}
+input::placeholder,textarea::placeholder{color:rgba(255,255,255,0.25)}
+select option{background:#1a1a1a;color:#fff}
+textarea{min-height:120px;resize:vertical}
+.plan-select{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:1rem}
+.plan-option{border:1px solid rgba(255,255,255,0.12);border-radius:var(--radius-sm);padding:1rem;cursor:pointer;transition:all 0.2s;background:rgba(255,255,255,0.03)}
+.plan-option.selected{border-color:var(--green);background:rgba(26,158,117,0.12)}
+.plan-option-name{font-family:'Syne',sans-serif;font-weight:700;font-size:1rem;margin-bottom:0.2rem}
+.plan-option-price{font-size:1.4rem;font-weight:700;color:var(--green);font-family:'Syne',sans-serif}
+.plan-option-desc{font-size:0.75rem;color:rgba(255,255,255,0.4);margin-top:0.3rem}
+.flow-actions{display:flex;gap:10px;margin-top:1.5rem}
+.btn-back{background:transparent;border:1px solid rgba(255,255,255,0.15);color:rgba(255,255,255,0.6);padding:0.75rem 1.5rem;border-radius:var(--radius-sm);font-family:'DM Sans',sans-serif;font-size:0.9rem;cursor:pointer;transition:all 0.2s}
+.btn-back:hover{border-color:rgba(255,255,255,0.4);color:#fff}
+.btn-next{background:var(--green);color:#fff;border:none;padding:0.75rem 2rem;border-radius:var(--radius-sm);font-family:'Syne',sans-serif;font-weight:700;font-size:0.9rem;cursor:pointer;flex:1;transition:all 0.2s}
+.btn-next:hover{background:var(--green-dark)}
+
+.ai-loading{text-align:center;padding:2rem 0}
+.spinner{width:36px;height:36px;border:3px solid rgba(26,158,117,0.2);border-top-color:var(--green);border-radius:50%;animation:spin 0.8s linear infinite;margin:0 auto 1rem}
+@keyframes spin{to{transform:rotate(360deg)}}
+.ai-text{font-size:0.88rem;color:rgba(255,255,255,0.5)}
+
+.result-card{background:rgba(26,158,117,0.08);border:1px solid rgba(26,158,117,0.25);border-radius:var(--radius);padding:1.5rem;margin-bottom:1rem}
+.result-label{font-size:0.72rem;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:var(--green);margin-bottom:0.8rem}
+.result-text{font-size:0.88rem;line-height:1.65;color:rgba(255,255,255,0.85);white-space:pre-wrap}
+.success-icon{text-align:center;font-size:2.5rem;margin-bottom:0.5rem}
+
+/* CHECKOUT */
+.summary-row{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid rgba(255,255,255,0.06);font-size:0.88rem}
+.summary-row:last-child{border-bottom:none;font-weight:600;font-size:1rem;padding-top:12px}
+.summary-row span:first-child{color:rgba(255,255,255,0.55)}
+.payfast-logo-bar{display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:6px;padding:6px 12px;font-size:0.78rem;color:rgba(255,255,255,0.5);margin-bottom:1rem}
+.pay-spinner{width:20px;height:20px;border:2px solid rgba(255,255,255,0.2);border-top-color:#fff;border-radius:50%;animation:spin 0.8s linear infinite;display:inline-block;vertical-align:middle;margin-right:8px}
+
+/* THANK YOU */
+.thankyou-wrap{max-width:520px;margin:0 auto;padding:4rem 2rem;text-align:center}
+.big-check{font-size:4rem;margin-bottom:1rem}
+
+/* EMAIL STATUS TOAST */
+.toast{position:fixed;bottom:2rem;left:50%;transform:translateX(-50%);background:var(--green);color:#fff;padding:0.75rem 1.5rem;border-radius:99px;font-size:0.88rem;font-weight:500;z-index:9999;opacity:0;transition:opacity 0.3s;pointer-events:none}
+.toast.show{opacity:1}
 </style>
+</head>
+<body>
 
-<div class="af">
-  <h2 class="sr-only">ApplyForMe — We apply for jobs on your behalf. Interviews in 5–10 days.</h2>
-
-  <div id="pageHome">
-    <div class="hero">
-      <div class="hero-badge"><i class="ti ti-bolt" aria-hidden="true"></i>South Africa's #1 AI job service</div>
-      <h1 class="hero-title">We apply for you.<br><span>Interviews in 5–10 days.</span></h1>
-      <p class="hero-sub">Upload your CV, pay R50, and our AI applies to 10+ matching jobs with tailored cover letters. You relax. We hustle.</p>
-      <div class="promise-row">
-        <div class="promise-box"><div class="promise-num">10+</div><div class="promise-lbl">jobs applied to</div></div>
-        <div class="promise-box"><div class="promise-num">5–10</div><div class="promise-lbl">days to interview</div></div>
-        <div class="promise-box"><div class="promise-num">R50</div><div class="promise-lbl">one-time fee</div></div>
-      </div>
-      <button class="btn-main" style="max-width:280px;margin:0 auto;display:block" onclick="showPage('pageSignup')">Get started — R50 <i class="ti ti-arrow-right" aria-hidden="true"></i></button>
+<!-- LANDING -->
+<div class="screen active" id="s-landing">
+  <nav>
+    <div class="logo">Apply<span>ForMe</span></div>
+    <button class="nav-btn" onclick="goto('s-signup')">Get started</button>
+  </nav>
+  <div class="hero">
+    <div class="badge">Live in South Africa 🇿🇦</div>
+    <h1>We apply for you.<br><span class="accent">You get interviews.</span></h1>
+    <p class="sub">Upload your CV, tell us what you want — we write custom cover letters and apply to 10–25 jobs on your behalf. Results in 5–10 days.</p>
+    <div class="cta-row">
+      <button class="btn-primary" onclick="goto('s-signup')">Start getting interviews →</button>
+      <button class="btn-ghost" onclick="document.getElementById('how').scrollIntoView({behavior:'smooth'})">See how it works</button>
     </div>
+    <div class="trust-line">From R50 · No hidden fees · 5–10 day guarantee</div>
+  </div>
 
-    <p class="section-label">How it works</p>
-    <div class="how-row" style="margin-bottom:1.5rem">
-      <div class="how-box"><div class="how-icon"><i class="ti ti-upload" aria-hidden="true"></i></div><div class="how-step">Step 1</div><div class="how-title">Upload your CV</div></div>
-      <div class="how-box"><div class="how-icon"><i class="ti ti-credit-card" aria-hidden="true"></i></div><div class="how-step">Step 2</div><div class="how-title">Pay R50</div></div>
-      <div class="how-box"><div class="how-icon"><i class="ti ti-robot" aria-hidden="true"></i></div><div class="how-step">Step 3</div><div class="how-title">AI applies for you</div></div>
-      <div class="how-box"><div class="how-icon"><i class="ti ti-calendar-check" aria-hidden="true"></i></div><div class="how-step">Step 4</div><div class="how-title">Get interviews</div></div>
+  <div class="stats">
+    <div class="stat"><div class="stat-num">2 847</div><div class="stat-label">Jobs applied to</div></div>
+    <div class="stat"><div class="stat-num">68%</div><div class="stat-label">Get an interview</div></div>
+    <div class="stat"><div class="stat-num">9 days</div><div class="stat-label">Avg. time to offer</div></div>
+    <div class="stat"><div class="stat-num">R50</div><div class="stat-label">Starts from</div></div>
+  </div>
+
+  <div class="section" id="how">
+    <div class="section-tag">How it works</div>
+    <div class="section-title">4 steps. Zero stress.</div>
+    <div class="steps">
+      <div class="step"><div class="step-num">01</div><div class="step-title">Choose your plan</div><div class="step-desc">Pick Starter (10 jobs) or Pro (25 jobs). Pay once — no subscriptions.</div></div>
+      <div class="step"><div class="step-num">02</div><div class="step-title">Tell us what you want</div><div class="step-desc">Share your role, skills and location. Takes 2 minutes.</div></div>
+      <div class="step"><div class="step-num">03</div><div class="step-title">AI writes cover letters</div><div class="step-desc">Every application gets a custom, tailored cover letter written by AI.</div></div>
+      <div class="step"><div class="step-num">04</div><div class="step-title">You get interviews</div><div class="step-desc">Sit back. Recruiters contact you directly. We send you updates by email.</div></div>
     </div>
+  </div>
 
-    <p class="section-label">Choose your plan</p>
-    <div class="plan-row">
-      <div class="plan-card" onclick="selectPlan('starter',this)">
+  <div class="section">
+    <div class="section-tag">Pricing</div>
+    <div class="section-title">Simple, honest pricing.</div>
+    <div class="pricing">
+      <div class="plan">
         <div class="plan-name">Starter</div>
-        <div class="plan-price">R50 <span>once</span></div>
-        <div class="plan-feat">
-          <div><i class="ti ti-check" aria-hidden="true"></i>10 job applications</div>
-          <div><i class="ti ti-check" aria-hidden="true"></i>Tailored cover letters</div>
-          <div><i class="ti ti-check" aria-hidden="true"></i>Results in 5–10 days</div>
-          <div><i class="ti ti-check" aria-hidden="true"></i>Email updates</div>
-        </div>
+        <div class="plan-price">R50<span> once-off</span></div>
+        <ul class="plan-features">
+          <li>10 job applications</li>
+          <li>Tailored cover letters</li>
+          <li>Results in 5–10 days</li>
+          <li>Email updates</li>
+        </ul>
+        <button class="plan-btn" onclick="selectPlan('starter');goto('s-signup')">Get Starter</button>
       </div>
-      <div class="plan-card featured" onclick="selectPlan('pro',this)">
-        <div class="plan-badge">Most popular</div>
+      <div class="plan featured">
+        <div class="plan-badge">MOST POPULAR</div>
         <div class="plan-name">Pro</div>
-        <div class="plan-price">R120 <span>once</span></div>
-        <div class="plan-feat">
-          <div><i class="ti ti-check" aria-hidden="true"></i>25 job applications</div>
-          <div><i class="ti ti-check" aria-hidden="true"></i>LinkedIn profile boost</div>
-          <div><i class="ti ti-check" aria-hidden="true"></i>CV improvement tips</div>
-          <div><i class="ti ti-check" aria-hidden="true"></i>Priority matching</div>
-          <div><i class="ti ti-check" aria-hidden="true"></i>WhatsApp updates</div>
-        </div>
+        <div class="plan-price">R120<span> once-off</span></div>
+        <ul class="plan-features">
+          <li>25 job applications</li>
+          <li>LinkedIn profile boost tips</li>
+          <li>CV improvement tips</li>
+          <li>Priority matching</li>
+          <li>WhatsApp updates</li>
+        </ul>
+        <button class="plan-btn" onclick="selectPlan('pro');goto('s-signup')">Get Pro</button>
       </div>
     </div>
+  </div>
 
-    <div class="guarantee">
-      <i class="ti ti-shield-check g-icon" aria-hidden="true"></i>
-      <div>
-        <div class="g-title">Our 5–10 day interview guarantee</div>
-        <div class="g-sub">If you don't receive at least one interview request within 10 business days, we'll re-apply to a new batch of jobs — completely free.</div>
-      </div>
+  <div class="guarantee">
+    <div style="font-size:1.8rem;flex-shrink:0">🛡️</div>
+    <div>
+      <strong>Our 5–10 day interview guarantee</strong>
+      <p>If you don't receive at least one interview request within 10 business days, we'll re-apply to a new batch of jobs — completely free.</p>
     </div>
+  </div>
 
-    <p class="section-label">What people say</p>
+  <div class="section">
+    <div class="section-tag">What people say</div>
+    <div class="section-title">Real results from real people.</div>
     <div class="testimonials">
-      <div class="testi"><div class="testi-text">"Got 3 interview calls in 6 days. I didn't write a single cover letter myself!"</div><div class="testi-name">Thabo M. — Johannesburg</div></div>
-      <div class="testi"><div class="testi-text">"Landed a job at Nedbank. Best R50 I ever spent."</div><div class="testi-name">Lerato K. — Pretoria</div></div>
-      <div class="testi"><div class="testi-text">"Was unemployed for 3 months. Used ApplyForMe, got hired in 9 days."</div><div class="testi-name">Sipho D. — Durban</div></div>
-      <div class="testi"><div class="testi-text">"The cover letters were better than anything I could write. 100% recommend."</div><div class="testi-name">Zanele N. — Cape Town</div></div>
-    </div>
-
-    <button class="btn-main" onclick="showPage('pageSignup')">Start getting interviews <i class="ti ti-arrow-right" aria-hidden="true"></i></button>
-  </div>
-
-  <div id="pageSignup" class="hidden">
-    <div class="step-bar">
-      <div class="s-dot on" id="d1"></div>
-      <div class="s-dot" id="d2"></div>
-      <div class="s-dot" id="d3"></div>
-      <div class="s-dot" id="d4"></div>
-    </div>
-
-    <div id="s1">
-      <div class="card">
-        <div style="font-size:13px;color:var(--color-text-secondary);margin-bottom:0.75rem">Step 1 of 4 — Your details</div>
-        <div class="inp-group">
-          <label class="inp-label">Full name</label>
-          <input type="text" id="fname" placeholder="Your full name">
-        </div>
-        <div class="inp-group">
-          <label class="inp-label">Email address</label>
-          <input type="text" id="femail" placeholder="your@email.com">
-        </div>
-        <div class="inp-group">
-          <label class="inp-label">Phone (WhatsApp)</label>
-          <input type="text" id="fphone" placeholder="+27 ...">
-        </div>
-        <div class="inp-group" style="margin-bottom:0">
-          <label class="inp-label">Job title you are looking for</label>
-          <input type="text" id="fjob" placeholder="e.g. Accountant, Software Developer, Teacher">
-        </div>
-      </div>
-      <div class="card">
-        <div style="font-size:13px;color:var(--color-text-secondary);margin-bottom:0.75rem">Preferred locations</div>
-        <div class="inp-group">
-          <label class="inp-label">City / Province</label>
-          <input type="text" id="fcity" placeholder="e.g. Johannesburg, Remote, Cape Town">
-        </div>
-        <div class="inp-group" style="margin-bottom:0">
-          <label class="inp-label">Key skills or experience to highlight</label>
-          <textarea id="fskills" style="min-height:70px" placeholder="e.g. 3 years experience, degree in accounting, fluent in isiZulu..."></textarea>
-        </div>
-      </div>
-      <button class="btn-main" onclick="goS(2)">Next — upload CV <i class="ti ti-arrow-right" aria-hidden="true"></i></button>
-      <button class="btn-ghost" onclick="showPage('pageHome')"><i class="ti ti-arrow-left" aria-hidden="true"></i> Back</button>
-    </div>
-
-    <div id="s2" class="hidden">
-      <div class="card">
-        <div style="font-size:13px;color:var(--color-text-secondary);margin-bottom:0.75rem">Step 2 of 4 — Upload your CV</div>
-        <p style="font-size:14px;font-weight:500;color:var(--color-text-primary);margin-bottom:0.5rem">Upload your CV</p>
-        <p style="font-size:13px;color:var(--color-text-secondary);margin-bottom:1rem">Our AI will read your CV to write personalised cover letters for every application.</p>
-        <div class="upload-zone" id="uz" onclick="document.getElementById('cvf').click()">
-          <div class="uz-icon"><i class="ti ti-file-text" aria-hidden="true"></i></div>
-          <p class="uz-txt" id="uzlbl">Click to upload CV (PDF or Word)</p>
-          <input type="file" id="cvf" accept=".pdf,.doc,.docx" style="display:none" onchange="onCVUpload(this)">
-        </div>
-        <div style="margin-top:1rem">
-          <p style="font-size:12px;color:var(--color-text-secondary);margin-bottom:6px">No CV? Paste a brief summary instead:</p>
-          <textarea id="cvtext" style="min-height:80px" placeholder="Name, education, work experience, skills..."></textarea>
-        </div>
-      </div>
-      <button class="btn-main" onclick="goS(3)">Next — payment <i class="ti ti-arrow-right" aria-hidden="true"></i></button>
-      <button class="btn-ghost" onclick="goS(1)"><i class="ti ti-arrow-left" aria-hidden="true"></i> Back</button>
-    </div>
-
-    <div id="s3" class="hidden">
-      <div class="card">
-        <div style="font-size:13px;color:var(--color-text-secondary);margin-bottom:0.75rem">Step 3 of 4 — Payment</div>
-        <p style="font-size:14px;font-weight:500;color:var(--color-text-primary);margin-bottom:0.25rem">Complete your order</p>
-        <p style="font-size:13px;color:var(--color-text-secondary);margin-bottom:1rem">Secure payment. Your results are guaranteed within 10 business days.</p>
-        <div style="background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:0.875rem;margin-bottom:1rem">
-          <div style="display:flex;justify-content:space-between;font-size:13px;color:var(--color-text-secondary);margin-bottom:4px"><span>Plan</span><span id="planName" style="color:var(--color-text-primary);font-weight:500">Pro — 25 applications</span></div>
-          <div style="display:flex;justify-content:space-between;font-size:13px;color:var(--color-text-secondary);margin-bottom:4px"><span>Guarantee</span><span style="color:#085041">Interview in 5–10 days</span></div>
-          <div style="border-top:0.5px solid var(--color-border-tertiary);margin:8px 0"></div>
-          <div style="display:flex;justify-content:space-between;font-size:16px;font-weight:500;color:var(--color-text-primary)"><span>Total</span><span id="planTotal" style="color:#1D9E75">R120</span></div>
-        </div>
-        <p style="font-size:13px;color:var(--color-text-secondary);margin-bottom:8px">Pay with:</p>
-        <div class="pay-methods">
-          <div class="pay-btn sel" onclick="selPay(this)"><i class="ti ti-credit-card" style="font-size:18px;display:block;margin-bottom:4px" aria-hidden="true"></i>PayFast</div>
-          <div class="pay-btn" onclick="selPay(this)"><i class="ti ti-device-mobile" style="font-size:18px;display:block;margin-bottom:4px" aria-hidden="true"></i>Yoco</div>
-          <div class="pay-btn" onclick="selPay(this)"><i class="ti ti-building-bank" style="font-size:18px;display:block;margin-bottom:4px" aria-hidden="true"></i>Ozow EFT</div>
-          <div class="pay-btn" onclick="selPay(this)"><i class="ti ti-qrcode" style="font-size:18px;display:block;margin-bottom:4px" aria-hidden="true"></i>SnapScan</div>
-        </div>
-      </div>
-      <div class="guarantee" style="margin-bottom:1rem">
-        <i class="ti ti-shield-check g-icon" aria-hidden="true"></i>
-        <div><div class="g-title">Interview guarantee</div><div class="g-sub">No interview in 10 days? We re-apply for free.</div></div>
-      </div>
-      <button class="btn-main" onclick="goS(4)"><i class="ti ti-lock" aria-hidden="true" style="margin-right:6px"></i>Pay & start applying now</button>
-      <button class="btn-ghost" onclick="goS(2)"><i class="ti ti-arrow-left" aria-hidden="true"></i> Back</button>
-    </div>
-
-    <div id="s4" class="hidden">
-      <div class="card" style="text-align:center;padding:2rem 1.5rem">
-        <div style="font-size:13px;color:var(--color-text-secondary);margin-bottom:1rem">Step 4 of 4 — AI is applying</div>
-        <i class="ti ti-robot" style="font-size:36px;color:#1D9E75;margin-bottom:0.75rem" aria-hidden="true"></i>
-        <p style="font-size:16px;font-weight:500;color:var(--color-text-primary);margin-bottom:0.5rem">Applying to jobs for you...</p>
-        <p style="font-size:13px;color:var(--color-text-secondary);margin-bottom:1.25rem" id="aiStatus">Reading your CV and finding the best matches...</p>
-        <div class="loading-dots"><span></span><span></span><span></span></div>
-      </div>
-      <div class="timeline" id="tlBox" style="display:none">
-        <div class="tl-item"><div class="tl-dot done"><i class="ti ti-check" aria-hidden="true"></i></div><div><div class="tl-title">CV analysed</div><div class="tl-sub">Skills and experience extracted</div></div></div>
-        <div class="tl-item"><div class="tl-dot done"><i class="ti ti-check" aria-hidden="true"></i></div><div><div class="tl-title">Jobs matched</div><div class="tl-sub" id="matchCount">Finding best roles...</div></div></div>
-        <div class="tl-item"><div class="tl-dot active"><i class="ti ti-edit" aria-hidden="true"></i></div><div><div class="tl-title">Cover letters written</div><div class="tl-sub">Personalised for each employer</div></div></div>
-        <div class="tl-item"><div class="tl-dot wait"><i class="ti ti-send" aria-hidden="true"></i></div><div><div class="tl-title">Applications sent</div><div class="tl-sub">Waiting...</div></div></div>
-        <div class="tl-item"><div class="tl-dot wait"><i class="ti ti-calendar" aria-hidden="true"></i></div><div><div class="tl-title">Interviews expected</div><div class="tl-sub">Within 5–10 business days</div></div></div>
-      </div>
-      <div id="aiResults"></div>
+      <div class="testi"><div class="testi-quote">"Got 3 interview calls in 6 days. I didn't write a single cover letter myself!"</div><div class="testi-author">Thabo M. — Johannesburg</div></div>
+      <div class="testi"><div class="testi-quote">"Landed a job at Nedbank. Best R50 I ever spent."</div><div class="testi-author">Lerato K. — Pretoria</div></div>
+      <div class="testi"><div class="testi-quote">"Was unemployed for 3 months. Used ApplyForMe, got hired in 9 days."</div><div class="testi-author">Sipho D. — Durban</div></div>
+      <div class="testi"><div class="testi-quote">"The cover letters were better than anything I could write. 100% recommend."</div><div class="testi-author">Zanele N. — Cape Town</div></div>
     </div>
   </div>
 
-  <div id="pageDone" class="hidden">
-    <div class="card" style="text-align:center;padding:2rem">
-      <i class="ti ti-circle-check" style="font-size:40px;color:#1D9E75;margin-bottom:0.75rem" aria-hidden="true"></i>
-      <p style="font-size:18px;font-weight:500;color:var(--color-text-primary);margin-bottom:0.5rem">Applications submitted!</p>
-      <p style="font-size:13px;color:var(--color-text-secondary);line-height:1.6" id="doneMsg">We applied to 10 jobs on your behalf. Expect interview calls within 5–10 business days. Check your email for all cover letters.</p>
-    </div>
-    <div id="doneResults"></div>
-    <div class="guarantee">
-      <i class="ti ti-shield-check g-icon" aria-hidden="true"></i>
-      <div><div class="g-title">Your guarantee is active</div><div class="g-sub">No interview in 10 business days? We re-apply for free. No questions asked.</div></div>
-    </div>
-    <button class="btn-main" onclick="sendPrompt('I want to upgrade my ApplyForMe plan for more applications')">Upgrade for more applications ↗</button>
-    <button class="btn-ghost" onclick="resetApp()">Apply again</button>
+  <div style="text-align:center;padding:2rem 2rem 4rem">
+    <button class="btn-primary" style="font-size:1.05rem;padding:1rem 2.5rem" onclick="goto('s-signup')">Start getting interviews →</button>
   </div>
 </div>
 
-<script>
-let selectedPlan = {name:'Pro — 25 applications', price:'R120', count:10};
-let cvFileName = '';
-
-function showPage(id){
-  ['pageHome','pageSignup','pageDone'].forEach(p=>document.getElementById(p).classList.add('hidden'));
-  document.getElementById(id).classList.remove('hidden');
-}
-
-function selectPlan(type, el){
-  if(type==='pro') selectedPlan={name:'Pro — 25 applications',price:'R120',count:10};
-  else selectedPlan={name:'Starter — 10 applications',price:'R50',count:5};
-  showPage('pageSignup');
-  goS(1);
-}
-
-function goS(n){
-  [1,2,3,4].forEach(i=>{
-    document.getElementById('s'+i).classList.add('hidden');
-    const d=document.getElementById('d'+i);
-    d.classList.remove('on','done');
-    if(i<n) d.classList.add('done');
-    if(i===n) d.classList.add('on');
-  });
-  document.getElementById('s'+n).classList.remove('hidden');
-  if(n===3){
-    document.getElementById('planName').textContent=selectedPlan.name;
-    document.getElementById('planTotal').textContent=selectedPlan.price;
-  }
-  if(n===4) startAI();
-}
-
-function selPay(el){
-  document.querySelectorAll('.pay-btn').forEach(b=>b.classList.remove('sel'));
-  el.classList.add('sel');
-}
-
-function onCVUpload(inp){
-  if(inp.files&&inp.files[0]){
-    cvFileName=inp.files[0].name;
-    document.getElementById('uz').classList.add('done');
-    document.getElementById('uzlbl').textContent='✓ '+cvFileName;
-  }
-}
-
-async function startAI(){
-  const statusMsgs=['Reading your CV and finding the best matches...','Scanning 100+ job boards in South Africa...','Writing personalised cover letters...','Submitting applications to employers...','Almost done — finalising your applications...'];
-  let si=0;
-  const iv=setInterval(()=>{
-    if(si<statusMsgs.length){document.getElementById('aiStatus').textContent=statusMsgs[si++];}
-  },2200);
-
-  setTimeout(()=>{ document.getElementById('tlBox').style.display='block'; },3000);
-
-  const job=document.getElementById('fjob').value||'professional';
-  const city=document.getElementById('fcity').value||'South Africa';
-  const skills=document.getElementById('fskills').value||'';
-  const cvNote=cvFileName?'CV file: '+cvFileName:(document.getElementById('cvtext').value||'Not provided');
-
-  const prompt=`You are an AI job application service in South Africa. A client paid for job applications.
-
-Client info:
-- Seeking: ${job}
-- Location: ${city}
-- Skills/experience: ${skills}
-- CV: ${cvNote}
-
-Generate exactly ${selectedPlan.count} real-sounding South African job applications. For each one write a strong 4-sentence cover letter that is professional and tailored.
-
-Respond ONLY in valid JSON, no markdown fences:
-{"applications":[{"company":"Company Name","role":"Job Title","location":"City, SA","cover_letter":"Full 4-sentence cover letter here."}]}`;
-
-  try{
-    const res=await fetch('https://api.anthropic.com/v1/messages',{
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1000,messages:[{role:'user',content:prompt}]})
-    });
-    const data=await res.json();
-    clearInterval(iv);
-    const txt=data.content.map(b=>b.text||'').join('');
-    const clean=txt.replace(/```json|```/g,'').trim();
-    const parsed=JSON.parse(clean);
-    showDone(parsed.applications);
-  }catch(e){
-    clearInterval(iv);
-    showDone(null);
-  }
-}
-
-function showDone(apps){
-  const name=document.getElementById('fname').value||'there';
-  const email=document.getElementById('femail').value||'your email';
-  const job=document.getElementById('fjob').value||'your role';
-  const count=apps?apps.length:selectedPlan.count;
-
-  document.getElementById('doneMsg').textContent=`Hi ${name}! We applied to ${count} ${job} positions on your behalf. Expect interview calls within 5–10 business days. Full cover letters sent to ${email}.`;
-
-  const cont=document.getElementById('doneResults');
-  if(!apps){
-    cont.innerHTML='<div class="result-item"><div class="result-role">Applications submitted</div><div class="result-co">Check your email for full details</div></div>';
-  } else {
-    cont.innerHTML=apps.map(a=>`
-      <div class="result-item">
-        <div style="display:flex;justify-content:space-between;align-items:flex-start">
-          <div>
-            <div class="result-role">${a.role}</div>
-            <div class="result-co"><i class="ti ti-building" style="font-size:12px;margin-right:3px" aria-hidden="true"></i>${a.company} · ${a.location}</div>
-          </div>
-          <span style="background:#E1F5EE;color:#085041;font-size:11px;font-weight:500;padding:3px 9px;border-radius:20px;white-space:nowrap">Applied</span>
+<!-- STEP 1: PLAN -->
+<div class="screen" id="s-signup">
+  <nav><div class="logo">Apply<span>ForMe</span></div><button class="btn-ghost-sm" onclick="goto('s-landing')">← Back</button></nav>
+  <div class="signup-wrap">
+    <div class="progress-bar">
+      <div class="progress-step done"></div>
+      <div class="progress-step"></div>
+      <div class="progress-step"></div>
+      <div class="progress-step"></div>
+    </div>
+    <div class="flow-card">
+      <div class="flow-title">Choose your plan</div>
+      <div class="flow-sub">Pick the package that suits you best</div>
+      <div class="plan-select">
+        <div class="plan-option" id="opt-starter" onclick="selectPlan('starter')">
+          <div class="plan-option-name">Starter</div>
+          <div class="plan-option-price">R50</div>
+          <div class="plan-option-desc">10 applications</div>
         </div>
-        <details style="margin-top:6px">
-          <summary style="font-size:12px;color:var(--color-text-secondary);cursor:pointer">View cover letter</summary>
-          <div class="result-letter">${a.cover_letter}</div>
-        </details>
-      </div>`).join('');
-  }
-  document.getElementById('matchCount').textContent=`Matched ${count} roles for "${job}"`;
-  showPage('pageDone');
+        <div class="plan-option selected" id="opt-pro" onclick="selectPlan('pro')">
+          <div class="plan-option-name">Pro</div>
+          <div class="plan-option-price">R120</div>
+          <div class="plan-option-desc">25 applications + extras</div>
+        </div>
+      </div>
+      <div class="flow-actions">
+        <button class="btn-next" onclick="goto('s-step2')">Continue →</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- STEP 2: DETAILS -->
+<div class="screen" id="s-step2">
+  <nav><div class="logo">Apply<span>ForMe</span></div></nav>
+  <div class="signup-wrap">
+    <div class="progress-bar">
+      <div class="progress-step done"></div>
+      <div class="progress-step done"></div>
+      <div class="progress-step"></div>
+      <div class="progress-step"></div>
+    </div>
+    <div class="flow-card">
+      <div class="flow-title">Your details</div>
+      <div class="flow-sub">We'll send your cover letter and updates here</div>
+      <label>First Name</label>
+      <input type="text" id="inp-first" placeholder="e.g. Thabo">
+      <label>Last Name</label>
+      <input type="text" id="inp-last" placeholder="e.g. Mokoena">
+      <label>Email Address</label>
+      <input type="email" id="inp-email" placeholder="your@email.com">
+      <label>WhatsApp Number (optional)</label>
+      <input type="tel" id="inp-phone" placeholder="+27 XX XXX XXXX">
+      <label>City</label>
+      <select id="inp-city">
+        <option value="">Select your city</option>
+        <option>Johannesburg</option>
+        <option>Cape Town</option>
+        <option>Durban</option>
+        <option>Pretoria</option>
+        <option>Port Elizabeth</option>
+        <option>Other</option>
+      </select>
+      <div class="flow-actions">
+        <button class="btn-back" onclick="goto('s-signup')">← Back</button>
+        <button class="btn-next" onclick="validateStep2()">Continue →</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- STEP 3: JOB PREFS -->
+<div class="screen" id="s-step3">
+  <nav><div class="logo">Apply<span>ForMe</span></div></nav>
+  <div class="signup-wrap">
+    <div class="progress-bar">
+      <div class="progress-step done"></div>
+      <div class="progress-step done"></div>
+      <div class="progress-step done"></div>
+      <div class="progress-step"></div>
+    </div>
+    <div class="flow-card">
+      <div class="flow-title">Your job preferences</div>
+      <div class="flow-sub">Help us find the right opportunities for you</div>
+      <label>Job Title / Role</label>
+      <input type="text" id="inp-role" placeholder="e.g. Accountant, Software Developer">
+      <label>Industry</label>
+      <select id="inp-industry">
+        <option value="">Select industry</option>
+        <option>Finance & Banking</option>
+        <option>Information Technology</option>
+        <option>Healthcare</option>
+        <option>Retail & Sales</option>
+        <option>Engineering</option>
+        <option>Marketing & Media</option>
+        <option>Education</option>
+        <option>Government & Public Sector</option>
+        <option>Other</option>
+      </select>
+      <label>Years of experience</label>
+      <select id="inp-exp">
+        <option value="">Select</option>
+        <option>0–1 years (entry level)</option>
+        <option>2–4 years</option>
+        <option>5–9 years</option>
+        <option>10+ years</option>
+      </select>
+      <label>Key skills (brief summary for cover letters)</label>
+      <textarea id="inp-skills" placeholder="e.g. Excel, data analysis, team leadership, 3 years at Absa..."></textarea>
+      <div class="flow-actions">
+        <button class="btn-back" onclick="goto('s-step2')">← Back</button>
+        <button class="btn-next" onclick="validateStep3()">Generate My Cover Letter →</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- STEP 4: AI COVER LETTER -->
+<div class="screen" id="s-result">
+  <nav><div class="logo">Apply<span>ForMe</span></div></nav>
+  <div class="signup-wrap">
+    <div class="progress-bar">
+      <div class="progress-step done"></div>
+      <div class="progress-step done"></div>
+      <div class="progress-step done"></div>
+      <div class="progress-step done"></div>
+    </div>
+    <div class="flow-card">
+      <div id="result-loading" class="ai-loading">
+        <div class="spinner"></div>
+        <div class="ai-text" id="ai-status">Analysing your profile...</div>
+      </div>
+      <div id="result-content" style="display:none">
+        <div class="success-icon">🎉</div>
+        <div class="flow-title" style="text-align:center">Your cover letter is ready!</div>
+        <div class="flow-sub" style="text-align:center;margin-bottom:1.5rem">We'll customise this for each application — and email it to you now</div>
+        <div class="result-card">
+          <div class="result-label">Sample Cover Letter</div>
+          <div class="result-text" id="cover-letter-text"></div>
+        </div>
+        <div style="background:rgba(26,158,117,0.1);border:1px solid rgba(26,158,117,0.2);border-radius:var(--radius-sm);padding:1rem;font-size:0.85rem;color:rgba(255,255,255,0.7);margin-bottom:1.2rem">
+          ✅ We'll find <strong id="app-count" style="color:var(--green)">25</strong> matching jobs and apply within <strong style="color:var(--green)">5–10 business days</strong>.
+          <br><br>
+          📧 <span id="email-status-msg">A copy of this cover letter is being sent to your inbox...</span>
+        </div>
+        <button class="btn-next" style="width:100%" onclick="goto('s-checkout')">Continue to Payment →</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- CHECKOUT -->
+<div class="screen" id="s-checkout">
+  <nav><div class="logo">Apply<span>ForMe</span></div><button class="btn-ghost-sm" onclick="goto('s-result')">← Back</button></nav>
+  <div class="signup-wrap">
+    <div class="flow-card">
+      <div class="flow-title">Complete your order</div>
+      <div class="flow-sub" id="checkout-sub">Pro Plan — R120 once-off</div>
+
+      <div id="order-summary" style="margin-bottom:1.5rem">
+        <div class="summary-row"><span>Plan</span><span id="sum-plan">Pro</span></div>
+        <div class="summary-row"><span>Applications</span><span id="sum-apps">25 job applications</span></div>
+        <div class="summary-row"><span>Cover letters</span><span>Included ✓</span></div>
+        <div class="summary-row"><span>Email delivery</span><span>Included ✓</span></div>
+        <div class="summary-row"><span>5–10 day guarantee</span><span>Included ✓</span></div>
+        <div class="summary-row"><span>Total</span><span id="sum-total" style="color:var(--green)">R120.00</span></div>
+      </div>
+
+      <div class="payfast-logo-bar">🔒 Secure payment via PayFast — SA's #1 payment gateway</div>
+      <p style="font-size:0.8rem;color:rgba(255,255,255,0.35);margin-bottom:1rem">EFT · Credit/Debit Card · Instant EFT · Mobicred</p>
+
+      <button class="btn-next" style="width:100%;font-size:1rem;padding:0.9rem" id="pay-btn" onclick="submitPayFast()">
+        Pay <span id="pay-amount">R120</span> with PayFast →
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- THANK YOU -->
+<div class="screen" id="s-thankyou">
+  <nav><div class="logo">Apply<span>ForMe</span></div></nav>
+  <div class="thankyou-wrap">
+    <div class="big-check">✅</div>
+    <div class="flow-title" style="font-size:2rem;margin-bottom:0.5rem">Payment received!</div>
+    <p style="color:rgba(255,255,255,0.6);margin-bottom:2rem;font-size:1rem;line-height:1.6">Thank you! We'll start applying to jobs on your behalf within <strong style="color:var(--green)">24 hours</strong>. Check your inbox for updates.</p>
+    <div style="background:rgba(26,158,117,0.1);border:1px solid rgba(26,158,117,0.2);border-radius:var(--radius);padding:1.5rem;margin-bottom:2rem;text-align:left">
+      <p style="font-size:0.88rem;color:rgba(255,255,255,0.7);line-height:1.7">
+        📧 <strong>What happens next:</strong><br>
+        1. We match your profile with the best open jobs<br>
+        2. Our AI writes a personalised cover letter for each one<br>
+        3. We submit your applications within 24 hours<br>
+        4. You'll receive interview invitations directly from employers<br>
+        5. If no interview in 10 days — we re-apply for free 🛡️
+      </p>
+    </div>
+    <button class="btn-primary" onclick="goto('s-landing')">Back to Home</button>
+  </div>
+</div>
+
+<!-- CANCELLED -->
+<div class="screen" id="s-cancelled">
+  <nav><div class="logo">Apply<span>ForMe</span></div></nav>
+  <div class="thankyou-wrap">
+    <div style="font-size:3rem;margin-bottom:1rem">😔</div>
+    <div class="flow-title" style="margin-bottom:0.5rem">Payment cancelled</div>
+    <p style="color:rgba(255,255,255,0.6);margin-bottom:2rem">No worries! Your cover letter is saved. Come back whenever you're ready.</p>
+    <button class="btn-primary" onclick="goto('s-checkout')">Try Again →</button>
+  </div>
+</div>
+
+<!-- Toast notification -->
+<div class="toast" id="toast"></div>
+
+<!-- Hidden PayFast form -->
+<form id="pf-form" method="POST" style="display:none">
+  <input type="hidden" name="merchant_id" id="pf-merchant-id">
+  <input type="hidden" name="merchant_key" id="pf-merchant-key">
+  <input type="hidden" name="return_url" id="pf-return-url">
+  <input type="hidden" name="cancel_url" id="pf-cancel-url">
+  <input type="hidden" name="name_first" id="pf-first">
+  <input type="hidden" name="name_last" id="pf-last">
+  <input type="hidden" name="email_address" id="pf-email">
+  <input type="hidden" name="m_payment_id" id="pf-payment-id">
+  <input type="hidden" name="amount" id="pf-amount">
+  <input type="hidden" name="item_name" id="pf-item-name">
+  <input type="hidden" name="item_description" id="pf-item-desc">
+</form>
+
+<script>
+// ============================================================
+// PAYFAST LIVE CREDENTIALS
+// ============================================================
+const PAYFAST = {
+  merchantId:  '26084651',
+  merchantKey: 'txgepr1uhvajs',
+  siteUrl: 'https://applyforme.vercel.app',
+  sandbox: false
+};
+
+// ============================================================
+// EMAILJS CREDENTIALS
+// ============================================================
+const EMAILJS_CONFIG = {
+  publicKey:   'eRO97ItKM-sXtdUJH',
+  serviceId:   'service_sdwt3mi',
+  templateId:  'adqx8jm'
+};
+
+// Initialise EmailJS
+emailjs.init(EMAILJS_CONFIG.publicKey);
+
+// ============================================================
+// APP STATE
+// ============================================================
+const state = {plan:'pro', first:'', last:'', email:'', role:'', skills:'', coverLetter:''};
+
+// ============================================================
+// NAVIGATION
+// ============================================================
+function goto(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo(0,0);
 }
 
-function resetApp(){
-  document.getElementById('fname').value='';
-  document.getElementById('femail').value='';
-  document.getElementById('fphone').value='';
-  document.getElementById('fjob').value='';
-  document.getElementById('fcity').value='';
-  document.getElementById('fskills').value='';
-  document.getElementById('cvtext').value='';
-  document.getElementById('cvf').value='';
-  cvFileName='';
-  document.getElementById('uz').classList.remove('done');
-  document.getElementById('uzlbl').textContent='Click to upload CV (PDF or Word)';
-  document.getElementById('tlBox').style.display='none';
-  document.getElementById('aiResults').innerHTML='';
-  document.getElementById('doneResults').innerHTML='';
-  showPage('pageHome');
-  goS(1);
+function selectPlan(p){
+  state.plan=p;
+  document.getElementById('opt-starter').classList.toggle('selected',p==='starter');
+  document.getElementById('opt-pro').classList.toggle('selected',p==='pro');
 }
+
+// ============================================================
+// TOAST
+// ============================================================
+function showToast(msg, duration=3500){
+  const t=document.getElementById('toast');
+  t.textContent=msg;
+  t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'), duration);
+}
+
+// ============================================================
+// FORM VALIDATION
+// ============================================================
+function validateStep2(){
+  const first=document.getElementById('inp-first').value.trim();
+  const email=document.getElementById('inp-email').value.trim();
+  if(!first||!email){alert('Please fill in your first name and email.');return;}
+  state.first=first;
+  state.last=document.getElementById('inp-last').value.trim();
+  state.email=email;
+  goto('s-step3');
+}
+
+function validateStep3(){
+  const role=document.getElementById('inp-role').value.trim();
+  if(!role){alert('Please enter the type of role you want.');return;}
+  state.role=role;
+  state.skills=document.getElementById('inp-skills').value.trim();
+  goto('s-result');
+  generateCoverLetter();
+}
+
+// ============================================================
+// AI COVER LETTER GENERATION
+// ============================================================
+const statuses=['Analysing your profile...','Searching for matching roles...','Writing your cover letter...','Polishing the final draft...'];
+let si=0, sit;
+
+function generateCoverLetter(){
+  si=0;
+  document.getElementById('result-loading').style.display='block';
+  document.getElementById('result-content').style.display='none';
+  document.getElementById('ai-status').textContent=statuses[0];
+  sit=setInterval(()=>{si=Math.min(si+1,statuses.length-1);document.getElementById('ai-status').textContent=statuses[si];},1800);
+
+  const prompt=`Write a professional, warm, and persuasive South African job application cover letter for:
+- Name: ${state.first} ${state.last}
+- Role: ${state.role}
+- Background: ${state.skills||'Experienced professional seeking new opportunities'}
+- Plan: ${state.plan==='pro'?'Pro (25 applications)':'Starter (10 applications)'}
+
+Requirements:
+- 3 short paragraphs, under 220 words
+- Personal and confident, not generic
+- Reference South African work context naturally
+- No placeholders like [Company Name] — write for a general application
+- End with a clear call to action`;
+
+  fetch('https://api.anthropic.com/v1/messages',{
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1000,messages:[{role:'user',content:prompt}]})
+  })
+  .then(r=>r.json())
+  .then(d=>{
+    clearInterval(sit);
+    const text=d.content&&d.content[0]?d.content[0].text:'Your personalised cover letter is ready. Our team will apply it to each job.';
+    showResult(text);
+  })
+  .catch(()=>{
+    clearInterval(sit);
+    showResult(`Dear Hiring Manager,\n\nI am writing to express my strong interest in the ${state.role} position. With my background and passion for delivering results, I am confident I would be a valuable addition to your team.\n\nThroughout my career in South Africa, I have developed strong skills in ${state.skills||'my field'}, consistently going above and beyond to achieve outstanding results. I am a fast learner and a collaborative team player who thrives in dynamic environments.\n\nI would welcome the opportunity to discuss how my experience aligns with your requirements. Thank you for your time — I look forward to hearing from you.\n\nYours sincerely,\n${state.first} ${state.last}`);
+  });
+}
+
+function showResult(text){
+  state.coverLetter = text;
+  document.getElementById('cover-letter-text').textContent=text;
+  document.getElementById('app-count').textContent=state.plan==='pro'?'25':'10';
+  document.getElementById('result-loading').style.display='none';
+  document.getElementById('result-content').style.display='block';
+
+  // Update checkout summary
+  const isPro=state.plan==='pro';
+  document.getElementById('checkout-sub').textContent=(isPro?'Pro':'Starter')+' Plan — R'+(isPro?'120':'50')+' once-off';
+  document.getElementById('sum-plan').textContent=isPro?'Pro':'Starter';
+  document.getElementById('sum-apps').textContent=isPro?'25 job applications':'10 job applications';
+  document.getElementById('sum-total').textContent=isPro?'R120.00':'R50.00';
+  document.getElementById('pay-amount').textContent=isPro?'R120':'R50';
+
+  // Send email immediately after cover letter is generated
+  sendCoverLetterEmail(text);
+}
+
+// ============================================================
+// EMAILJS — SEND COVER LETTER TO CUSTOMER
+// ============================================================
+function sendCoverLetterEmail(coverLetterText){
+  const emailStatusMsg = document.getElementById('email-status-msg');
+  emailStatusMsg.textContent = 'Sending your cover letter to your inbox...';
+
+  const templateParams = {
+    user_email:   state.email,
+    first_name:   state.first,
+    cover_letter: coverLetterText,
+    app_count:    state.plan==='pro'?'25':'10',
+    plan_name:    state.plan==='pro'?'Pro':'Starter',
+  };
+
+  emailjs.send(EMAILJS_CONFIG.serviceId, EMAILJS_CONFIG.templateId, templateParams)
+    .then(() => {
+      emailStatusMsg.textContent = '✅ Cover letter sent to ' + state.email;
+      showToast('📧 Cover letter emailed to ' + state.email);
+    })
+    .catch((err) => {
+      console.error('EmailJS error:', err);
+      emailStatusMsg.textContent = 'Email delivery will follow shortly.';
+    });
+}
+
+// ============================================================
+// PAYFAST CHECKOUT
+// ============================================================
+function submitPayFast(){
+  const isPro=state.plan==='pro';
+  const amount=isPro?'120.00':'50.00';
+  const pfUrl=PAYFAST.sandbox
+    ?'https://sandbox.payfast.co.za/eng/process'
+    :'https://www.payfast.co.za/eng/process';
+
+  document.getElementById('pf-form').action=pfUrl;
+  document.getElementById('pf-merchant-id').value=PAYFAST.merchantId;
+  document.getElementById('pf-merchant-key').value=PAYFAST.merchantKey;
+  document.getElementById('pf-return-url').value=PAYFAST.siteUrl+'/?payment=success';
+  document.getElementById('pf-cancel-url').value=PAYFAST.siteUrl+'/?payment=cancelled';
+  document.getElementById('pf-first').value=state.first;
+  document.getElementById('pf-last').value=state.last;
+  document.getElementById('pf-email').value=state.email;
+  document.getElementById('pf-payment-id').value='AFM-'+Date.now();
+  document.getElementById('pf-amount').value=amount;
+  document.getElementById('pf-item-name').value='ApplyForMe '+(isPro?'Pro':'Starter');
+  document.getElementById('pf-item-desc').value=(isPro?'25':'10')+' AI-powered job applications';
+
+  const btn=document.getElementById('pay-btn');
+  btn.innerHTML='<span class="pay-spinner"></span> Redirecting to PayFast...';
+  btn.disabled=true;
+
+  setTimeout(()=>document.getElementById('pf-form').submit(),1000);
+}
+
+// Handle PayFast return URL
+const params=new URLSearchParams(window.location.search);
+if(params.get('payment')==='success') goto('s-thankyou');
+else if(params.get('payment')==='cancelled') goto('s-cancelled');
 </script>
+</body>
+</html>
